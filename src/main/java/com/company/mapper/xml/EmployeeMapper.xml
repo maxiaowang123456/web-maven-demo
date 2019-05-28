@@ -86,6 +86,14 @@
         )}
     </select>
 
+    <!--存储过程返回多个结果集列表-->
+    <select id="getEmployListByProc" parameterType="java.util.Map"
+            resultMap="employee" statementType="CALLABLE" useCache="false">
+        {call pro_list_emp(
+          #{realName,mode=IN,jdbcType=VARCHAR}
+        )}
+    </select>
+
     <insert id="save" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
         insert into t_employee(real_name,sex,birthday,mobile,email,position)
         values(#{realName},#{sex,typeHandler=com.company.typehandler.SexEnumTypeHandler},#{birthday},#{mobile},#{email},#{position})

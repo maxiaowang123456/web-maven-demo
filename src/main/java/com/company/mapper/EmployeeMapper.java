@@ -5,6 +5,7 @@ import com.company.pojo.ProcEmployee;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeMapper {
     Employee getEmployee(Long id);
@@ -13,5 +14,6 @@ public interface EmployeeMapper {
     int save(Employee employee);
     List<Employee> getEmployeeList(@Param("ids") List<Integer>ids);
     void countEmployee(ProcEmployee procEmployee);
+    List getEmployListByProc( Map<String,Object> params);
 
 }

@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:spring-mybatis.xml"})
@@ -73,5 +71,16 @@ public class EmployeeTest {
         procEmployee.setRealName("zs");
         employeeMapper.countEmployee(procEmployee);
         System.out.println(procEmployee.getTotal()+":"+procEmployee.getExeDate());
+    }
+
+    /**
+     * MyBatis调用存储过程返回多个结果集
+     */
+    @Test
+    public void testGetEmployeeListByCallable(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("realName","zs");
+        List<Employee>employeeList=employeeMapper.getEmployListByProc(params);
+        System.out.println(employeeList.get(0).getRealName()+"==="+employeeList.get(0).getEmail());
     }
 }

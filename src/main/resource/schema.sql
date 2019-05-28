@@ -96,3 +96,10 @@ select count(*) into total from t_employee where real_name like concat('%',v_rea
 select current_date into exe_date from dual;
 end $$
 delimiter ;
+
+delimiter $$
+create procedure pro_list_emp(in v_real_name varchar(60))
+begin
+ select * from t_employee where real_name like concat('%',v_real_name,'%');
+end $$
+delimiter ;
