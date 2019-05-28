@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.mapper.EmployeeMapper">
+    <resultMap id="employee" type="Employee">
+        <id column="id" property="id"/>
+        <result column="real_name" property="realName"/>
+        <result column="sex" property="sex" typeHandler="com.company.typehandler.SexEnumTypeHandler"/>
+        <result column="birthday" property="birthday"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="position" property="position"/>
+        <result column="note" property="note"/>
+        <association property="workCard" column="id" select="com.company.mapper.WorkCardMapper.getWorkCardByEmpId"/>
+        <collection property="employeeTaskList" column="id" select="com.company.mapper.EmployeeTaskMapper.getEmployeeTaskByEmpId"/>
+        <discriminator javaType="long" column="sex">
+            <case value="1" resultMap="maleHealthFormMapper"/>
+            <case value="0" resultMap="femaleHealthFormMapper"/>
+        </discriminator>
+    </resultMap>
+    <resultMap id="femaleHealthFormMapper" type="FemaleEmployee" extends="employee">
+        <association property="femaleHealthForm" column="id" select="com.company.mapper.FemaleHealthFormMapper.getFemaleHealthForm"/>
+    </resultMap>
+    <resultMap id="maleHealthFormMapper" type="MaleEmployee" extends="employee">
+        <association property="maleHealthForm" column="id" select="com.company.mapper.MaleHealthFormMapper.getMaleHealthForm"/>
+    </resultMap>
+
+    <resultMap id="employeeCascade" type="Employee">
+        <id property="id" column="id"/>
+        <result column="real_name" property="realName"/>
+        <result column="sex" property="sex" typeHandler="com.company.typehandler.SexEnumTypeHandler"/>
+        <result column="birthday" property="birthday"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="position" property="position"/>
+        <collection property="employeeTaskList" column="id" ofType="EmployeeTask" fetchType="lazy">
+            <id column="et_id" property="id"/>
+            <result column="et_task_name" property="taskName"/>
+            <association property="task" column="et_task_id" javaType="Task" fetchType="eager">
+                <id column="t_id" property="id"/>
+                <result column="t_title" property="title"/>
+                <result column="t_context" property="context"/>
+            </association>
+        </collection>
+    </resultMap>
+    <sql id="empSql">
+        id,real_name,sex,birthday,mobile,email,position,note
+    </sql>
+    <select id="getEmployee" parameterType="long" resultMap="employee" >
+        select id,real_name,sex,birthday,mobile,email,position,note from t_employee
+        where id=#{id}
+    </select>
+
+    <select id="getEmployeeByRealName" parameterType="java.lang.String" resultMap="employee">
+        select <include refid="empSql"/>
+          from t_employee
+        <where>
+            real_name=#{realName}
+        </where>
+    </select>
+
+    <select id="getEmployeeByCascade" parameterType="Employee" resultMap="employeeCascade">
+        select e.id,e.real_name,e.sex,e.birthday,e.mobile,e.email,e.position,
+          et.id et_id,et.task_id et_task_id,et.task_name et_task_name,
+          t.id t_id,t.title t_title,t.context t_context
+          from t_employee e left join t_employee_task et on e.id=et.emp_id
+          left join t_task t on et.task_id=t.id
+      <where>
+          <if test="realName !=null and realName !=''">
+              and real_name=#{realName}
+          </if>
+      </where>
+    </select>
+    <select id="getEmployeeList" parameterType="java.util.List" resultMap="employee">
+        select <include refid="empSql"/> from t_employee
+        where id in
+        <foreach collection="ids" index="index" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    
+    <select id="countEmployee" parameterType="ProcEmployee" statementType="CALLABLE" useCache="false">
+        {call pro_employee(
+        #{realName,mode=IN,jdbcType=VARCHAR},
+        #{total,mode=OUT,jdbcType=INTEGER},
+        #{exeDate,mode=OUT,jdbcType=DATE}
+        )}
+    </select>
+
+    <insert id="save" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
+        insert into t_employee(real_name,sex,birthday,mobile,email,position)
+        values(#{realName},#{sex,typeHandler=com.company.typehandler.SexEnumTypeHandler},#{birthday},#{mobile},#{email},#{position})
+    </insert>
+    <cache/>
+</mapper>
