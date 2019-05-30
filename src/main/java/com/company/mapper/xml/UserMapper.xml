@@ -4,4 +4,17 @@
     <select id="getUser" parameterType="java.lang.String" resultType="User">
         select id,username,password from user where username=#{username}
     </select>
+
+    <!--MyBatis主键回显,主键生成规则是mysql的自增规则-->
+     <insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+            insert into user(username,password)values(#{username},password(#{password}))
+     </insert>
+
+    <!--MyBatis插入数据时，主键自定义生成规则
+    <insert id="saveUser" parameterType="User">
+      <selectKey keyProperty="id"  resultType="java.lang.String" order="BEFORE">
+          select replace(uuid(),'-','')
+      </selectKey>
+        insert into user(username,password)values(#{username},password(#{password}))
+    </insert>-->
 </mapper>

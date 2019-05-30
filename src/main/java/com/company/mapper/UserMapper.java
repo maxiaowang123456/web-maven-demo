@@ -3,5 +3,6 @@ import com.company.pojo.User;
 
 public interface UserMapper {
 
-    public User getUser(String username);
+     User getUser(String username);
+     int saveUser(User user);
 }

@@ -10,4 +10,12 @@
 <%@ taglib  uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib  uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="sf" %>
+<%
+    String path=request.getContextPath();
+    String basePath=(String)request.getSession().getAttribute("basePath");
+    if(basePath==null||basePath.trim().equals("")){
+        basePath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+        request.getSession().setAttribute("basePath",basePath);
+    }
+%>
 
