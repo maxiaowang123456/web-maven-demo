@@ -17,4 +17,13 @@
       </selectKey>
         insert into user(username,password)values(#{username},password(#{password}))
     </insert>-->
+
+    <select id="findUserList" parameterType="User" resultType="User" >
+        select * from user
+        <where>
+            <if test="username!=null and username !=''">
+                username=#{username}
+            </if>
+        </where>
+    </select>
 </mapper>

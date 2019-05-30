@@ -1,5 +1,7 @@
 package com.company.pojo;
 
+import com.sun.istack.internal.NotNull;
+
 public class User {
 
     public User() {

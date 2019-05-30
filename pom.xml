@@ -20,6 +20,7 @@
     <spring.version>5.0.0.RELEASE</spring.version>
     <tiles.version>3.0.8</tiles.version>
     <log4j.version>2.11.2</log4j.version>
+    <poi.version>4.1.0</poi.version>
   </properties>
 
   <dependencies>
@@ -120,6 +121,13 @@
       <scope>runtime</scope>
       <version>${log4j.version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>${poi.version}</version>
+    </dependency>
+
   </dependencies>
 
 
