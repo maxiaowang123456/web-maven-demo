@@ -69,12 +69,12 @@ public class UserController {
         return modelAndView;
     }
 
-    public  ExcelExportService exportService(){
+    private  ExcelExportService exportService(){
         //自定义解析Excel数据接口
         return new ExcelExportService() {
             @Override
             public void makeExcel(Map<String, Object> model, Workbook workbook) {
-                List<User>userList=(List<User>)model.get("userList");
+                List<User>userList=(List)model.get("userList");
                 Sheet sheet=workbook.createSheet("用户列表");
                 Row title=sheet.createRow(0);
                 title.createCell(0).setCellValue("编号");

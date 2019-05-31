@@ -16,4 +16,10 @@
     <definition name="main/userList" extends="base">
         <put-attribute name="body" value="/WEB-INF/jsp/main/userList.jsp"/>
     </definition>
+    <definition name="main/upload" extends="base">
+        <put-attribute name="body" value="/WEB-INF/jsp/main/upload.jsp"/>
+    </definition>
+    <definition name="main/locale" extends="base">
+        <put-attribute name="body" value="/WEB-INF/jsp/main/locale.jsp"/>
+    </definition>
 </tiles-definitions>

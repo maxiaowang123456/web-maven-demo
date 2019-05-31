@@ -10,4 +10,13 @@ public class IndexController {
     public String main(){
         return "main/index";
     }
+
+    @RequestMapping("/error")
+    public String error(){
+        throw new RuntimeException();
+    }
+    @RequestMapping("/locale")
+    public String locale(){
+        return "main/locale";
+    }
 }
