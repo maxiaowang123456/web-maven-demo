@@ -1,8 +1,8 @@
 package com.company.pojo;
 
-import com.sun.istack.internal.NotNull;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
 
     public User() {
     }

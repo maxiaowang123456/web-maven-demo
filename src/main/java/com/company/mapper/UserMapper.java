@@ -9,4 +9,6 @@ public interface UserMapper {
      User getUser(String username);
      int saveUser(User user);
      List<User>findUserList(User user);
+     User findUserById(Long id);
+     int deleteUser(Long id);
 }
