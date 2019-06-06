@@ -12,7 +12,7 @@ excludeFilters={@ComponentScan.Filter(type=FilterType.ANNOTATION,value=EnableWeb
 @EnableAspectJAutoProxy
 public class RootConfig {
 
-    @Bean
+//    @Bean
     public AspectJConfig aspectJConfig(){
         return new AspectJConfig();
     }

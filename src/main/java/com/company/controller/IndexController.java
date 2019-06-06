@@ -19,4 +19,9 @@ public class IndexController {
     public String locale(){
         return "main/locale";
     }
+
+    @RequestMapping("/redPacket")
+    public String redPacket(){
+        return "main/redPacket/grabRedPacket";
+    }
 }

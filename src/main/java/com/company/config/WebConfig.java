@@ -6,6 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,19 +22,26 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.company.controller"})
-public class WebConfig implements WebMvcConfigurer {
+@EnableAsync
+public class WebConfig extends AsyncConfigurerSupport implements WebMvcConfigurer {
 
-
-
+    /**
+     * 配置JSP视图解析器
+     * @return
+     */
     @Bean
     public ViewResolver viewResolver(){
         InternalResourceViewResolver viewResolver=
@@ -41,6 +53,27 @@ public class WebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
+    /**
+     * 配置JSON与对象对转换消息类
+     * @return
+     */
+    @Bean
+    public RequestMappingHandlerAdapter handlerAdapter(){
+        RequestMappingHandlerAdapter handlerAdapter=new RequestMappingHandlerAdapter();
+        MappingJackson2HttpMessageConverter messageConverter=
+                new MappingJackson2HttpMessageConverter();
+        MediaType mediaType=MediaType.APPLICATION_JSON_UTF8;
+        List<MediaType> mediaTypes=new ArrayList<>();
+        mediaTypes.add(mediaType);
+        messageConverter.setSupportedMediaTypes(mediaTypes);
+        handlerAdapter.getMessageConverters().add(messageConverter);
+        return handlerAdapter;
+    }
+
+    /**
+     * 配置Tiles布局视图解析器
+     * @return
+     */
     @Bean
     public TilesConfigurer tilesConfigurer(){
         TilesConfigurer configurer=new TilesConfigurer();
@@ -55,6 +88,10 @@ public class WebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
+    /**
+     * 配置文件上传请求解析器
+     * @return
+     */
     @Bean("multipartResolver")
     public MultipartResolver multipartResolver(){
         return new StandardServletMultipartResolver();
@@ -65,6 +102,10 @@ public class WebConfig implements WebMvcConfigurer {
         return new UserInterceptor();
     }
 
+    /**
+     * 配置国际化资源文件加载
+     * @return
+     */
     @Bean("messageSource")
     public MessageSource messageSource(){
         ReloadableResourceBundleMessageSource messageSource=new ReloadableResourceBundleMessageSource();
@@ -74,6 +115,10 @@ public class WebConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
+    /**
+     * 配置国际化语言和区域环境解析器
+     * @return
+     */
     @Bean("localeResolver")
     public LocaleResolver localeResolver(){
         SessionLocaleResolver localeResolver=new SessionLocaleResolver();
@@ -81,6 +126,10 @@ public class WebConfig implements WebMvcConfigurer {
         return localeResolver;
     }
 
+    /**
+     * 配置拦截国际化请求参数名称
+     * @return
+     */
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor(){
         LocaleChangeInterceptor localeChangeInterceptor=new LocaleChangeInterceptor();
@@ -100,5 +149,15 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(userHandlerInterceptor()).addPathPatterns("/param/*");
         registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/*");
+    }
+
+    @Override
+    public Executor getAsyncExecutor(){
+        ThreadPoolTaskExecutor taskExecutor=new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(5);
+        taskExecutor.setMaxPoolSize(10);
+        taskExecutor.setQueueCapacity(200);
+        taskExecutor.initialize();
+        return taskExecutor;
     }
 }

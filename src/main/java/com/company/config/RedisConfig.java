@@ -58,6 +58,8 @@ public class RedisConfig {
     private String password;
     @Value("${redis.cache.keyPrefix}")
     private String keyPrefix;
+    @Value("${redis.cache.ttl}")
+    private Long ttl;
 
     @Bean("poolConfig")
     public JedisPoolConfig jedisPoolConfig(){
@@ -124,16 +126,16 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         redisTemplate.setDefaultSerializer(stringRedisSerializer());
         redisTemplate.setKeySerializer(stringRedisSerializer());
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
+        redisTemplate.setValueSerializer(stringRedisSerializer());
         redisTemplate.setHashKeySerializer(stringRedisSerializer());
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer());
+        redisTemplate.setHashValueSerializer(stringRedisSerializer());
         return redisTemplate;
     }
 
     @Bean
     public RedisCacheManager redisCacheManager(){
         RedisCacheConfiguration cacheConfiguration=RedisCacheConfiguration.defaultCacheConfig();
-        cacheConfiguration=cacheConfiguration.entryTtl(Duration.ofMinutes(30l)).disableCachingNullValues()
+        cacheConfiguration=cacheConfiguration.entryTtl(Duration.ofMinutes(ttl)).disableCachingNullValues()
                 //设置缓存的key前缀
                 .computePrefixWith(cacheName->cacheName+keyPrefix)
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringRedisSerializer()))
