@@ -25,4 +25,7 @@
     <definition name="main/redPacket/grabRedPacket" extends="base">
         <put-attribute name="body" value="/WEB-INF/jsp/main/redPacket/grabRedPacket.jsp"/>
     </definition>
+    <definition name="main/iframe/iframe" extends="base">
+        <put-attribute name="body" value="/WEB-INF/jsp/main/iframe/iframe.jsp"/>
+    </definition>
 </tiles-definitions>

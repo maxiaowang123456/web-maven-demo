@@ -24,6 +24,7 @@
     <a href="${basePath}/locale?lang=en_US">英文显示</a>
     <a href="${basePath}/locale?lang=zh_CN">中文显示</a><br/>
     <a href="${basePath}/redPacket">抢红包</a>
+    <a href="${basePath}/submitCode">提交代码</a>
 </body>
 <script type="text/javascript">
     function jsonParam(){

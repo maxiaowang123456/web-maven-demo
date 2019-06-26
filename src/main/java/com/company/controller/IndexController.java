@@ -24,4 +24,9 @@ public class IndexController {
     public String redPacket(){
         return "main/redPacket/grabRedPacket";
     }
+
+    @RequestMapping("/submitCode")
+    public String submitCode(){
+        return "main/iframe/iframe";
+    }
 }
