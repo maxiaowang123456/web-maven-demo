@@ -162,5 +162,6 @@ public class WebConfig extends AsyncConfigurerSupport implements WebMvcConfigure
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/js/**").addResourceLocations("/WEB-INF/js/");
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/");
+        registry.addResourceHandler("/img/**").addResourceLocations("/WEB-INF/img/");
     }
 }

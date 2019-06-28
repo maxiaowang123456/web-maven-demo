@@ -29,4 +29,9 @@ public class IndexController {
     public String submitCode(){
         return "main/iframe/iframe";
     }
+
+    @RequestMapping("/w3sindex")
+    public String w3sindex(){
+      return "main/w3s/w3sindex";
+    }
 }
