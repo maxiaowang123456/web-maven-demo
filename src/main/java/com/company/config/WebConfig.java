@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.multipart.MultipartResolver;
@@ -33,7 +32,7 @@ import java.util.concurrent.Executor;
 @EnableWebMvc
 @ComponentScan(basePackages = {"com.company.controller"})
 @EnableAsync
-public class WebConfig extends AsyncConfigurerSupport implements WebMvcConfigurer {
+public class WebConfig  extends WebMvcConfigurerAdapter {
 
     /**
      * 配置JSP视图解析器
@@ -106,7 +105,7 @@ public class WebConfig extends AsyncConfigurerSupport implements WebMvcConfigure
     @Bean("messageSource")
     public MessageSource messageSource(){
         ReloadableResourceBundleMessageSource messageSource=new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:message");
+        messageSource.setBasename("classpath:properties.message");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(5);
         return messageSource;
@@ -148,7 +147,6 @@ public class WebConfig extends AsyncConfigurerSupport implements WebMvcConfigure
         registry.addInterceptor(localeChangeInterceptor()).addPathPatterns("/*");
     }
 
-    @Override
     public Executor getAsyncExecutor(){
         ThreadPoolTaskExecutor taskExecutor=new ThreadPoolTaskExecutor();
         taskExecutor.setCorePoolSize(5);
@@ -164,4 +162,5 @@ public class WebConfig extends AsyncConfigurerSupport implements WebMvcConfigure
         registry.addResourceHandler("/css/**").addResourceLocations("/WEB-INF/css/");
         registry.addResourceHandler("/img/**").addResourceLocations("/WEB-INF/img/");
     }
+
 }

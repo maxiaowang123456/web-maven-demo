@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:spring-mybatis.xml"})
+@ContextConfiguration(locations = {"classpath*:spring/spring-mybatis.xml"})
 public class EmployeeTest {
     @Autowired
     private EmployeeMapper employeeMapper;

@@ -35,7 +35,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="typeAliasesPackage" value="com.company.pojo"/>
         <property name="mapperLocations" value="classpath:com/company/mapper/xml/*.xml"/>
-        <property name="configLocation" value="classpath:sqlMapConfig.xml"/>
+        <property name="configLocation" value="classpath:spring/sqlMapConfig.xml"/>
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.company.mapper"/>

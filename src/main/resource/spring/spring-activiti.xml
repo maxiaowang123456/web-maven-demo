@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="dataSource_activiti" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.activiti.driverClassName}"/>
+        <property name="url" value="${jdbc.activiti.url}"/>
+        <property name="username" value="${jdbc.activiti.username}"/>
+        <property name="password" value="${jdbc.activiti.password}"/>
+        <property name="initialSize" value="${initialSize}"/>
+        <property name="maxActive" value="${maxActive}"/>
+        <property name="minIdle" value="${minIdle}"/>
+        <property name="maxWait" value="${maxWait}"/>
+        <property name="validationQuery" value="${validationQuery}"/>
+        <property name="testOnBorrow" value="${testOnBorrow}"/>
+        <property name="testOnReturn" value="${testOnReturn}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdelTimeMillis}"/>
+        <property name="removeAbandoned" value="${removeAbandoned}"/>
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+        <property name="logAbandoned" value="${logAbandoned}"/>
+    </bean>
+    <bean id="transactionManager_activiti" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_activiti"/>
+    </bean>
+    <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+        <property name="dataSource" ref="dataSource_activiti"/>
+        <property name="transactionManager" ref="transactionManager_activiti"/>
+        <property name="databaseSchemaUpdate" value="true"/>
+        <property name="asyncExecutorActivate" value="true"/>
+        <property name="deploymentResources" value="classpath:activity/*.bpmn"/>
+    </bean>
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+        <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
+    </bean>
+    <bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService"/>
+    <bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService"/>
+    <bean id="taskService" factory-bean="processEngine" factory-method="getTaskService"/>
+    <bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService"/>
+    <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
+</beans>

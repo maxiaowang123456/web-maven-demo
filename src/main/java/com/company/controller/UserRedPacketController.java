@@ -23,7 +23,7 @@ public class UserRedPacketController {
         Map<String,Object>map=new HashMap<>();
         boolean flag=result>0;
         map.put("success",flag);
-        map.put("message",flag?"抢红包成功":"抢红包失败");
+        map.put("properties/message",flag?"抢红包成功":"抢红包失败");
         return map;
     }
 
@@ -34,7 +34,7 @@ public class UserRedPacketController {
         Map<String,Object>map=new HashMap<>();
         boolean flag=result>0;
         map.put("success",flag);
-        map.put("message",flag?"抢红包成功":"抢红包失败");
+        map.put("properties/message",flag?"抢红包成功":"抢红包失败");
         return map;
     }
 }
