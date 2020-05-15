@@ -28,7 +28,7 @@
     <tiles.version>3.0.8</tiles.version>
     <log4j.version>2.11.2</log4j.version>
     <poi.version>4.1.0</poi.version>
-    <jackson.version>2.9.9</jackson.version>
+    <jackson.version>2.11.0</jackson.version>
       <jedis.version>2.9.1</jedis.version>
       <spring.redis.version>2.1.8.RELEASE</spring.redis.version>
     <jstl.version>1.2</jstl.version>
